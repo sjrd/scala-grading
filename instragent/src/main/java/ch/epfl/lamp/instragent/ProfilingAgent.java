@@ -10,8 +10,8 @@ import java.lang.instrument.UnmodifiableClassException;
 
 /**
  * Profiling agent that instruments byte-code to insert calls to
- * {@link grading.instrumented.Profiler#methodCalled(String, String, String)}
- * by using ASM library for byte-code manipulation.
+ * ch.epfl.lamp.grading.instrumented.Profiler#methodCalled(String, String, String)
+ * from the grading project, by using ASM library for byte-code manipulation.
  */
 public class ProfilingAgent {
     public static void premain(String args,
