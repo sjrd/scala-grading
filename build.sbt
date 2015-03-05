@@ -1,3 +1,6 @@
+import sbtassembly.Plugin.{AssemblyKeys, assemblySettings}
+import AssemblyKeys.{assembly, assemblyOption, jarName}
+
 val commonSettings = Seq(
   organization := "ch.epfl.lamp",
   version := "0.2-SNAPSHOT",
@@ -57,6 +60,7 @@ lazy val `scala-grading-runtime` = project.in(file("runtime")).
 
 lazy val `scala-grading-instragent` = project.in(file("instragent")).
   settings(commonSettings: _*).
+  settings(assemblySettings: _*).
   settings(
     description := "Java agent performing instrumentation for scala-grading.",
 
@@ -64,6 +68,11 @@ lazy val `scala-grading-instragent` = project.in(file("instragent")).
     crossPaths := false,
 
     libraryDependencies += "org.ow2.asm" % "asm" % "4.0",
+
+    // assembly options
+    mainClass in assembly := None, // don't want an executable JAR
+    assemblyOption in assembly ~= { _.copy(includeScala = false) },
+    jarName in assembly := s"${moduleName.value}-assembly-${version.value}.jar",
 
     packageOptions += {
       val classpath = (managedClasspath in Compile).value
@@ -77,8 +86,10 @@ lazy val `scala-grading-instragent` = project.in(file("instragent")).
       }
       Package.ManifestAttributes(
         new java.util.jar.Attributes.Name(
-            "Premain-Class")   -> "ch.epfl.lamp.instragent.ProfilingAgent",
-        new java.util.jar.Attributes.Name(
-            "Boot-Class-Path") -> asmJarString)
+            "Premain-Class") -> "ch.epfl.lamp.instragent.ProfilingAgent")
     }
+  ).
+  settings(
+    // Publish the assembled artifact
+    addArtifact(Artifact("scala-grading-instragent", "assembly"), assembly): _*
   )
