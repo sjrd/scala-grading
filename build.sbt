@@ -3,7 +3,7 @@ import AssemblyKeys.{assembly, assemblyOption, jarName}
 
 val commonSettings = Seq(
   organization := "ch.epfl.lamp",
-  version := "0.2",
+  version := "0.3-SNAPSHOT",
   scalaVersion := "2.11.5",
   crossScalaVersions := Seq("2.10.4", "2.11.5"),
   scalacOptions ++= Seq("-deprecation", "-feature"),
