@@ -5,6 +5,11 @@ val commonSettings = Seq(
   crossScalaVersions := Seq("2.10.4", "2.11.5"),
   scalacOptions ++= Seq("-deprecation", "-feature"),
 
+  // Java compiler interface settings
+  javacOptions ++= DefaultOptions.javac,
+  javacOptions in (Compile) ++= Seq("-source", "1.6"),
+  javacOptions in (Compile, compile) ++= Seq("-target", "1.6"),
+
   homepage := Some(url("https://github.com/sbt-coursera/scala-grading")),
   licenses += ("BSD 3-Clause", url("http://opensource.org/licenses/BSD-3-Clause")),
   organizationHomepage := Some(url("http://lamp.epfl.ch")),
