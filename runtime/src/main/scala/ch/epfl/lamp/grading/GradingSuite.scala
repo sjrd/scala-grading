@@ -103,12 +103,21 @@ trait GradingSuite extends FunSuiteLike {
     }
   }
 
+  private var totalWeight: Int = 0
+
+  override def suiteName = {
+    assert(!super.suiteName.contains("::"))
+    s"${super.suiteName}::$totalWeight"
+  }
+
   def test(testName: String, weight: Int, testTags: Tag*)(testFun: => Unit): Unit = {
-    val name = weight.toString + "\n" + testName
+    assert(!testName.contains("::"))
+    val name = s"${super.suiteName}::$testName::$weight"
     super.test(name, testTags: _*) {
       if (securityEnabled) runWithoutPrivileges(testFun)
       else testFun
     }
+    totalWeight += weight
   }
 
   override def test(testName: String, testTags: Tag*)(testFun: => Unit): Unit = {
