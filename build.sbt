@@ -59,7 +59,7 @@ lazy val `scala-grading-runtime` = project.in(file("runtime")).
   settings(commonSettings: _*).
   settings(
     description := "Runtime library for scala-grading.",
-
+    libraryDependencies += "org.scala-lang.modules" %% "scala-pickling" % "0.10.0",
     libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.1"
   )
 
