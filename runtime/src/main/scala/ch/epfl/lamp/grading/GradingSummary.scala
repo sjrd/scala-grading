@@ -33,8 +33,12 @@ object GradingSummary {
 
   /** Given test completion state, compute the grade and provide feedback. */
   def apply(suites: List[Suite]): GradingSummary = {
-    val score = suites.map { _.tests.values.map { t => t.failure.fold(t.weight)(_ => 0) }.sum }.sum
-    val maxScore = suites.map { _.weight }.sum
+    val score = suites.map { suite =>
+      suite.tests.values.map { test =>
+        test.failure.fold(test.weight)(_ => 0)
+      }.sum
+    }.sum
+    val maxScore = suites.map(_.weight).sum
     val feedback = {
       val sb = new StringBuilder
       sb.append {
