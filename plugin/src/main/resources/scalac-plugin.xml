@@ -1,0 +1,4 @@
+<plugin>
+  <name>scalagrading</name>
+  <classname>ch.epfl.lamp.grading.plugin.ScalaGradingPlugin</classname>
+</plugin>

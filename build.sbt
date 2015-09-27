@@ -53,7 +53,10 @@ lazy val root = project.in(file(".")).
     publish := {},
     publishLocal := {}
   ).
-  aggregate(`scala-grading-runtime`, `scala-grading-instragent`)
+  aggregate(
+    `scala-grading-runtime`, `scala-grading-plugin`,
+    `scala-grading-plugin-test`, `scala-grading-instragent`
+  )
 
 lazy val `scala-grading-runtime` = project.in(file("runtime")).
   settings(commonSettings: _*).
@@ -62,6 +65,25 @@ lazy val `scala-grading-runtime` = project.in(file("runtime")).
     libraryDependencies += "org.scala-lang.modules" %% "scala-pickling" % "0.10.0",
     libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.1"
   )
+
+lazy val `scala-grading-plugin` = project.in(file("plugin")).
+  settings(commonSettings: _*).
+  settings(
+    description := "Compiler plugin for instrumentation for scala-grading.",
+    libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
+    crossVersion := CrossVersion.full, // because the compiler API is not binary compatible
+    exportJars := true
+  )
+
+lazy val `scala-grading-plugin-test` = project.in(file("plugin-test")).
+  settings(commonSettings: _*).
+  settings(
+    description := "Tests for the scala-grading compiler plugin.",
+    autoCompilerPlugins := true,
+    scalacOptions +=
+      "-P:scalagrading:instrumentClassPrefix:ch.epfl.lamp.grading.tests.instrenabled"
+  ).
+  dependsOn(`scala-grading-runtime`, `scala-grading-plugin` % "plugin")
 
 lazy val `scala-grading-instragent` = project.in(file("instragent")).
   settings(commonSettings: _*).
